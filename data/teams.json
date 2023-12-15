@@ -1,0 +1,9 @@
+[
+  { "id": 1, "name": "Atlanta Hawks", "city": "Atlanta" },
+  { "id": 2, "name": "Boston Celtics", "city": "Boston" },
+  { "id": 3, "name": "Charlotte Hornets", "city": "Charlotte" },
+  { "id": 4, "name": "Chicago Bulls", "city": "Chicago" },
+  { "id": 5, "name": "Dallas Mavericks", "city": "Dallas" },
+  { "id": 6, "name": "New York Knicks", "city": "New York" },
+  { "id": 7, "name": "Detroit Pistons", "city": "Detroit" }
+]
