@@ -1,74 +1,74 @@
-const fs = require('fs');
+const Team = require('../models/teamModel');
 
-const teams = JSON.parse(fs.readFileSync(`${__dirname}/../data/teams.json`));
-
-exports.checkId = (req, res, next, val) => {
-  if (req.params.id * 1 > teams.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid Id',
+exports.getAllTeams = async (req, res) => {
+  try {
+    const teams = await Team.find();
+    res.status(200).json({
+      status: 'success',
+      results: teams.length,
+      requestedAt: req.requestTime,
+      data: {
+        teams,
+      },
     });
+  } catch (err) {
+    res.status(400).json({ status: 'Fail', message: 'Something went awry' });
   }
-  next();
 };
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.city || !req.body.name) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing city or name.',
+exports.getTeam = async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        team,
+      },
     });
+  } catch (err) {
+    res.status(400).json({ status: 'Fail', message: 'Something went awry' });
   }
-  next();
 };
 
-exports.getAllTeams = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    results: teams.length,
-    requestedAt: req.requestTime,
-    data: {
-      teams,
-    },
-  });
-};
-exports.getTeam = (req, res) => {
-  const id = req.params.id * 1;
-  const team = teams.find((x) => x.id === id);
+exports.addTeam = async (req, res) => {
+  try {
+    const newTeam = await Team.create(req.body);
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      team,
-    },
-  });
-};
-
-exports.addTeam = (req, res) => {
-  const newId = teams[teams.length - 1].id + 1;
-  const newTeam = Object.assign({ id: newId }, req.body);
-  teams.push(newTeam);
-
-  fs.writeFile(`${__dirname}/data/teams.json`, JSON.stringify(teams), (err) => {
     res.status(201).json({
       status: 'success',
       data: {
         team: newTeam,
       },
     });
-  });
+  } catch (err) {
+    res.status(400).json({ status: 'Fail', message: 'Invalid data' });
+  }
 };
-exports.updateTeam = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      team: `We're going as fast as we can god damnit`,
-    },
-  });
+
+exports.updateTeam = async (req, res) => {
+  try {
+    const team = await Team.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        team,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({ status: 'Fail', message: err });
+  }
 };
-exports.deleteTeam = (req, res) => {
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
+exports.deleteTeam = async (req, res) => {
+  try {
+    await Team.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    res.status(404).json({ status: 'Fail', message: err });
+  }
 };
