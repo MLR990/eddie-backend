@@ -41,7 +41,7 @@ exports.addTeam = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ status: 'Fail', message: 'Invalid data' });
+    res.status(400).json({ status: 'Fail', message: err.message });
   }
 };
 
