@@ -27,12 +27,10 @@ const teamSchema = new mongoose.Schema({
   },
   color1: {
     type: String,
-    // required: [true, 'A team must have a primary color'],
     trim: true,
   },
   color2: {
     type: String,
-    // required: [true, 'A team must have a secondary color'],
     trim: true,
   },
   color3: {
@@ -41,7 +39,6 @@ const teamSchema = new mongoose.Schema({
   },
   colorText: {
     type: String,
-    // required: [true, 'A team must have a text color'],
     trim: true,
   },
   championships: { type: Number, default: 0 },

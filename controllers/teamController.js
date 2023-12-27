@@ -1,8 +1,22 @@
 const Team = require('../models/teamModel');
+const APIFeatures = require('../utils/apiFeatures');
+
+exports.aliasMissingColors = (req, res, next) => {
+  req.query.limit = 5;
+  req.query.sort = 'city';
+
+  next();
+};
 
 exports.getAllTeams = async (req, res) => {
   try {
-    const teams = await Team.find();
+    const results = new APIFeatures(Team.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const teams = await results.query;
+
     res.status(200).json({
       status: 'success',
       results: teams.length,
