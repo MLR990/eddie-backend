@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const teamRouter = require('./routes/teamRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -12,6 +13,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

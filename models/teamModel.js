@@ -5,6 +5,9 @@ const teamSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'A team must have an ID'],
   },
+  league: {
+    type: String,
+  },
   code: {
     type: String,
     required: [true, 'A team must have a code'],
