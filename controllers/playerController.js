@@ -1,16 +1,9 @@
-const Team = require('../models/teamModel');
+const Player = require('../models/playerModel');
 const APIFeatures = require('../utils/apiFeatures');
 
-exports.aliasMissingColors = (req, res, next) => {
-  req.query.limit = 5;
-  req.query.sort = 'city';
-
-  next();
-};
-
-exports.getAllTeams = async (req, res) => {
+exports.getAllPlayers = async (req, res, next) => {
   try {
-    const results = new APIFeatures(Team.find(), req.query)
+    const results = new APIFeatures(Player.find(), req.query)
       .filter()
       .sort()
       .limitFields()
@@ -26,17 +19,20 @@ exports.getAllTeams = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ status: 'Fail', message: 'Something went awry' });
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Something went wrong getting players',
+    });
   }
 };
 
-exports.getTeam = async (req, res) => {
+exports.getPlayer = async (req, res) => {
   try {
-    const team = await Team.findById(req.params.id);
+    const player = await Player.findById(req.params.id);
     res.status(200).json({
       status: 'success',
       data: {
-        team,
+        player,
       },
     });
   } catch (err) {
@@ -44,14 +40,14 @@ exports.getTeam = async (req, res) => {
   }
 };
 
-exports.addTeam = async (req, res) => {
+exports.addPlayer = async (req, res) => {
   try {
-    const newTeam = await Team.create(req.body);
+    const newPlayer = await Player.create(req.body);
 
     res.status(201).json({
       status: 'success',
       data: {
-        team: newTeam,
+        player: newPlayer,
       },
     });
   } catch (err) {
@@ -59,26 +55,28 @@ exports.addTeam = async (req, res) => {
   }
 };
 
-exports.updateTeam = async (req, res) => {
+exports.updatePlayer = async (req, res) => {
   try {
     const filter = { _id: req.params.id };
-    const team = await Team.findOneAndUpdate(filter, req.body, {
+
+    const player = await Player.findOneAndUpdate(filter, req.body, {
       new: true,
       runValidators: true,
     });
     res.status(200).json({
       status: 'success',
       data: {
-        team,
+        player,
       },
     });
   } catch (err) {
     res.status(404).json({ status: 'Fail to Update', message: err });
   }
 };
-exports.deleteTeam = async (req, res) => {
+
+exports.deletePlayer = async (req, res) => {
   try {
-    await Team.findByIdAndDelete(req.params.id);
+    await Player.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: 'success',
       data: null,

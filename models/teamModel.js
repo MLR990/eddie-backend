@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 
 const teamSchema = new mongoose.Schema({
-  _id: {
-    type: Number,
-    required: [true, 'A team must have an ID'],
-  },
   league: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: 'League',
+    required: [true, 'A player must belong to a league'],
   },
   code: {
     type: String,
@@ -20,12 +18,12 @@ const teamSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    required: [true, 'A team must have a city'],
+    // required: [true, 'A team must have a city'],
     trim: true,
   },
   nickname: {
     type: String,
-    required: [true, 'A team must have a nickname'],
+    // required: [true, 'A team must have a nickname'],
     trim: true,
   },
   color1: {
@@ -45,6 +43,23 @@ const teamSchema = new mongoose.Schema({
     trim: true,
   },
   championships: { type: Number, default: 0 },
+  venue: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Venue',
+  },
+});
+
+teamSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'league',
+    select: 'name',
+  });
+  this.populate({
+    path: 'venue',
+    select: ['name', 'location', 'latitude', 'longitude', 'capacity'],
+  });
+
+  next();
 });
 
 const Team = mongoose.model('Team', teamSchema);

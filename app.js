@@ -4,6 +4,10 @@ const cors = require('cors');
 
 const teamRouter = require('./routes/teamRoutes');
 const userRouter = require('./routes/userRoutes');
+const leagueRouter = require('./routes/leagueRoutes');
+const playerRouter = require('./routes/playerRoutes');
+const venueRouter = require('./routes/venueRoutes');
+const gameRouter = require('./routes/gameRoutes');
 
 const app = express();
 
@@ -27,5 +31,9 @@ app.use(express.static(`${__dirname}/public`));
 //routes
 app.use('/api/v1/teams', teamRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/leagues', leagueRouter);
+app.use('/api/v1/players', playerRouter);
+app.use('/api/v1/venues', venueRouter);
+app.use('/api/v1/games', gameRouter);
 
 module.exports = app;
