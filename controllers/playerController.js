@@ -8,14 +8,14 @@ exports.getAllPlayers = async (req, res, next) => {
       .sort()
       .limitFields()
       .paginate();
-    const teams = await results.query;
+    const players = await results.query;
 
     res.status(200).json({
       status: 'success',
-      results: teams.length,
+      results: players.length,
       requestedAt: req.requestTime,
       data: {
-        teams,
+        players,
       },
     });
   } catch (err) {
@@ -51,6 +51,7 @@ exports.addPlayer = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ status: 'Fail', message: err.message });
   }
 };

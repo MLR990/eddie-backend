@@ -2,6 +2,9 @@ class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
     this.queryString = queryString;
+    this.currentPage = 0;
+    this.limit = 0;
+    this.skip = 0;
   }
 
   filter() {
@@ -45,7 +48,9 @@ class APIFeatures {
     const limit = this.queryString.limit * 1 || 100;
     const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
-
+    this.currentPage = page;
+    this.limit = limit;
+    this.skip = skip;
     return this;
   }
 }

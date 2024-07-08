@@ -24,10 +24,16 @@ const playerSchema = new mongoose.Schema(
     careerStart: {
       type: Number,
     },
+    careerEnd: {
+      type: Number,
+    },
     dateOfBirth: {
       type: String,
     },
     height: {
+      type: String,
+    },
+    weight: {
       type: String,
     },
     hometown: {

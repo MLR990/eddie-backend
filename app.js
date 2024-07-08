@@ -8,6 +8,8 @@ const leagueRouter = require('./routes/leagueRoutes');
 const playerRouter = require('./routes/playerRoutes');
 const venueRouter = require('./routes/venueRoutes');
 const gameRouter = require('./routes/gameRoutes');
+const missingPlayerRouter = require('./routes/missingPlayerRoutes');
+const settingsRouter = require('./routes/settingsRoutes');
 
 const app = express();
 
@@ -35,5 +37,7 @@ app.use('/api/v1/leagues', leagueRouter);
 app.use('/api/v1/players', playerRouter);
 app.use('/api/v1/venues', venueRouter);
 app.use('/api/v1/games', gameRouter);
+app.use('/api/v1/missingPlayers', missingPlayerRouter);
+app.use('/api/v1/settings', settingsRouter);
 
 module.exports = app;

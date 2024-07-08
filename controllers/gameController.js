@@ -1,6 +1,8 @@
 const Game = require('../models/gameModel');
 const APIFeatures = require('../utils/apiFeatures');
 
+const mainRoute = 'http://127.0.0.1:5000';
+
 const getTodaysDate = (endDate) => {
   const today = new Date();
   const year = today.getFullYear();
@@ -9,11 +11,12 @@ const getTodaysDate = (endDate) => {
   if (endDate) {
     return `${year}-${month}-${day} 23:59:00`;
   }
-  return `${year}-${month}-${day} 00:00:00`;
+  return `${year}-${month}-${day}`;
 };
 
 exports.aliasTodaysGames = (req, res, next) => {
   req.query = { gameDay: { lt: getTodaysDate(true), gt: getTodaysDate() } };
+  // req.query = { gameDay: getTodaysDate() };
   req.query.sort = 'gameDay';
   next();
 };
@@ -32,10 +35,21 @@ exports.getAllGames = async (req, res) => {
       .paginate();
     const games = await results.query;
 
+    const totalItems = await Game.countDocuments({});
+    const totalPages = Math.ceil(totalItems / results.limit);
+    const nextPage =
+      results.currentPage < totalPages ? results.currentPage + 1 : null;
+
     res.status(200).json({
       status: 'success',
       results: games.length,
+      totalResults: totalItems,
       requestedAt: req.requestTime,
+      page: results.currentPage,
+      totalPages,
+      nextPage: nextPage
+        ? `${mainRoute}/api/v1/games?page=${nextPage}&limit=${results.limit}`
+        : null,
       data: {
         games,
       },
